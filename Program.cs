@@ -1,6 +1,8 @@
+﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TaskFlowApi.Data;
 using TaskFlowApi.Entities;
+using TaskFlowApi.Features.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +12,13 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<UserService>();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//اتوماتیک validation
+builder.Services.AddValidatorsFromAssemblyContaining<UserValidator>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,24 +31,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
-app.MapGet("/", () => "Task Flow Api is running");
-
-app.MapGet("/users", async (AppDbContext db) =>
-{
-    var users = await db.users.ToListAsync();
-    return Results.Ok(users);
-});
-
-app.MapPost("/users", async (AppDbContext db, User user) =>
-{
-    user.Id = Guid.NewGuid();
-    db.users.Add(user);
-    await db.SaveChangesAsync();
-
-    return Results.Created($"/users/{user.Id}", user);
-});
-
+app.MapUserEndpoints(); //  => جداسازی endpoint
 
 app.Run();
 
