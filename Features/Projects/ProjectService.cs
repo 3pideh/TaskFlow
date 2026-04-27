@@ -1,21 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using TaskFlowApi.Data;
+using TaskFlowApi.Repositories;
 
 namespace TaskFlowApi.Features.Projects
 {
     public class ProjectService
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly ProjectRepository _projectRepository;
 
-        public ProjectService(AppDbContext appDbContext)
+        public ProjectService(ProjectRepository projectRepository)
         {
-            _appDbContext = appDbContext;
+           _projectRepository = projectRepository;
         }
 
         public async Task<List<Entities.Projects>> GetProjects()
         {
-            return await _appDbContext.projects.ToListAsync();
+            return await _projectRepository.GetProjects();
         }
     }
 }

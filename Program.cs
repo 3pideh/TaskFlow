@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using TaskFlowApi.Data;
 using TaskFlowApi.Entities;
 using TaskFlowApi.Features.Users;
+using TaskFlowApi.Interfaces;
+using TaskFlowApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IUserRepositroy,UserRepository>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

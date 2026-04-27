@@ -26,8 +26,8 @@ namespace TaskFlowApi.Features.Users
 
             app.MapPost("/users", async (UserService service, User user) =>
             {
-                user.Id = Guid.NewGuid();
-                await service.CreateUsersAsync(user);
+                
+                await service.CreateUserAsync(user);
 
                 return Results.Created($"/users/{user.Id}", user);
             });

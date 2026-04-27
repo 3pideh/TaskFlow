@@ -1,27 +1,28 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskFlowApi.Data;
 using TaskFlowApi.Entities;
+using TaskFlowApi.Interfaces;
 
 namespace TaskFlowApi.Features.Users
 {
     public class UserService
     {
-        private readonly AppDbContext _dbContext;
+        private readonly IUserRepositroy _userRepositroy;
 
-        public UserService(AppDbContext dbContext)
+        public UserService(IUserRepositroy userRepositroy)
         {
-            _dbContext = dbContext;
+            _userRepositroy = userRepositroy;
         }
 
         public async Task<List<User>> GetUsersAsync()
         {
-            return await _dbContext.users.ToListAsync();
+            return await _userRepositroy.GetUsersAsync();
         }
 
-        public async Task CreateUsersAsync(User user)
+        public async Task CreateUserAsync(User user)
         {
-            await _dbContext.users.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
+            user.Id = Guid.NewGuid();
+            await _userRepositroy.CreateUserAsync(user);
         }
     }
 }
