@@ -1,6 +1,6 @@
 ﻿Endpoint → UserService → DbContext
 
-استفاده از Repositoru Pattern 
+استفاده از Repository Pattern 
 رسیدن از الگوی بالا به پایینی
 
 Endpoint
